@@ -18,7 +18,7 @@ def insert_connection(cd, ct):
     conn = sqlite3.connect(db_seguridad)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO ALERT_REGISTRY (CONNECTION_DATE, CONNECTION_TIME)VALUES (?,?);", (cd, ct))
+    cursor.execute("INSERT INTO CONNECTIONS (CONNECTION_DATE, CONNECTION_TIME)VALUES (?,?);", (cd, ct))
 
     conn.commit()
     conn.close()
@@ -43,8 +43,9 @@ def get_alerts_by_type(ty):
     cursor = conn.cursor()
 
     for row in cursor.execute(
-            "SELECT * from (SELECT * from ALERT_REGISTRY CROSS JOIN ALERT_TYPE) where ALERT_ID=?", (str(ty),)):
-        ale_lst.append([row[1], row[2]])
+            'SELECT DESCRIPTION, SENSOR, ALERT_DATE, ALERT_TIME from ALERTS_REGISTRY INNER JOIN ALERT_TYPE \
+            ON ALERT_TYPE.ALERT_ID = ALERTS_REGISTRY.ALERT_ID where ALERTS_REGISTRY.ALERT_ID=?', (str(ty),)):
+        ale_lst.append([row[0], row[1], row[2], row[3]])
 
     conn.commit()
     conn.close()
@@ -55,7 +56,7 @@ def authentication(u, p):
     conn = sqlite3.connect(db_seguridad)
     cursor = conn.cursor()
 
-    (user, pwd) = cursor.execute("SELECT * from USERS")
+    (user, pwd) = cursor.execute("SELECT USERNAME, PASSWORD from USERS")
 
     conn.commit()
     conn.close()
