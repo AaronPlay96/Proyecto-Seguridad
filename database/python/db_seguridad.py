@@ -7,7 +7,7 @@ def insert_alert(aid, s, ad, atm):
     conn = sqlite3.connect(db_seguridad)
     cursor = conn.cursor()
 
-    cursor.execute("INSERT INTO ALERT_REGISTRY (ALERT_ID, SENSOR, ALERT_DATE, ALERT_TIME)VALUES (?,?,?,?);",
+    cursor.execute("INSERT INTO ALERTS_REGISTRY (ALERT_ID, SENSOR, ALERT_DATE, ALERT_TIME)VALUES (?,?,?,?);",
                    (aid, s, ad, atm))
 
     conn.commit()
